@@ -3,51 +3,52 @@ let world;
 let keyboard = new Keyboard();
 
 function init() {
-    canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
+   canvas = document.getElementById('canvas');
+   world = new World(canvas, keyboard);
+   console.log(world.character);
 }
 
 window.addEventListener('keydown', (e) => {
    if (e.code == 'ArrowRight') {
-    keyboard.RIGHT = true;
+      keyboard.RIGHT = true;
    }
-   
+
    if (e.code == 'ArrowLeft') {
-    keyboard.LEFT = true;
+      keyboard.LEFT = true;
    }
-   
+
    if (e.code == 'ArrowUp') {
-    keyboard.UP = true;
+      keyboard.UP = true;
    }
-   
+
    if (e.code == 'ArrowDown') {
-    keyboard.DOWN = true;
+      keyboard.DOWN = true;
    }
-   
+
    if (e.code == 'Space') {
-    keyboard.SPACE = true;
+      keyboard.SPACE = true;
    }
    // console.log(e);
 });
 
 window.addEventListener('keyup', (e) => {
    if (e.code == 'ArrowRight') {
-    keyboard.RIGHT = false;
+      keyboard.RIGHT = false;
    }
-   
+
    if (e.code == 'ArrowLeft') {
-    keyboard.LEFT = false;
+      keyboard.LEFT = false;
    }
-   
+
    if (e.code == 'ArrowUp') {
-    keyboard.UP = false;
+      keyboard.UP = false;
    }
-   
+
    if (e.code == 'ArrowDown') {
-    keyboard.DOWN = false;
+      keyboard.DOWN = false;
    }
-   
+
    if (e.code == 'Space') {
-    keyboard.SPACE = false;
+      keyboard.SPACE = false;
    }
 });

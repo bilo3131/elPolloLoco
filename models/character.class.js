@@ -1,6 +1,7 @@
 class Character extends MovableObject {
 
-    y = 180;
+    x = 0;
+    y = 100;
     height = 250;
     width = 150;
     IMAGES_WAITING = [
@@ -46,10 +47,23 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/3_jump/J-38.png',
         'assets/img/2_character_pepe/3_jump/J-39.png'
     ];
+    IMAGES_HURT = [
+        'assets/img/2_character_pepe/4_hurt/H-41.png',
+        'assets/img/2_character_pepe/4_hurt/H-42.png',
+        'assets/img/2_character_pepe/4_hurt/H-43.png'
+    ];
+    IMAGES_DEAD = [
+        'assets/img/2_character_pepe/5_dead/D-51.png',
+        'assets/img/2_character_pepe/5_dead/D-52.png',
+        'assets/img/2_character_pepe/5_dead/D-53.png',
+        'assets/img/2_character_pepe/5_dead/D-54.png',
+        'assets/img/2_character_pepe/5_dead/D-55.png',
+        'assets/img/2_character_pepe/5_dead/D-56.png',
+        'assets/img/2_character_pepe/5_dead/D-57.png'
+    ]
     world;
-    speed = 10;
+    speed = 5;
     walking_sound = new Audio('assets/audio/walk.mp3')
-
 
     constructor() {
         super().loadImage(this.IMAGES_WAITING[0]);
@@ -57,55 +71,67 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_WAITING);
         this.loadImages(this.IMAGES_WAITING_LONG);
         this.loadImages(this.IMAGES_JUMPING);
-        this.applyGravity();
+        this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_DEAD);
 
+        this.applyGravity();
         this.animate();
-        // this.jump();
     }
 
     animate() {
         setInterval(() => {
             // this.walking_sound.pause();
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.x += this.speed;
+            if (this.isPressedRight() && this.isLowerThanWorldRange()) {
+                this.moveRight();
                 this.otherDirection = false;
                 // this.walking_sound.play();
             }
 
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.x -= this.speed;
+            if (this.isPressedLeft() && this.isMoreThanStartPoint()) {
+                this.moveLeft()
                 this.otherDirection = true;
                 // this.walking_sound.play();
             }
 
-            if (this.world.keyboard.UP) {
-                this.speedY = 20;
-                this.playAnimation(this.IMAGES_JUMPING);
-                this.y -= 5;
+            if (this.isPressedSpace() && !this.isAboveGround()) {
+                this.jump();
             }
-
 
             this.world.camera_x = -this.x + 60;
         }, 1000 / 60);
 
         setInterval(() => {
-            if (this.isAboveGround()) {
+            if (this.isDead()) {
+                this.playAnimation(this.IMAGES_DEAD)
+            } else if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT)
+            } else if (!this.isPressedRight() && !this.isPressedLeft()) {
+                this.playAnimation(this.IMAGES_WAITING);
+            } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-            } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                }
+            } else if (this.isPressedRight() || this.isPressedLeft()) {
+                this.playAnimation(this.IMAGES_WALKING);
             }
         }, 50);
-
-        setInterval(() => {
-            if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
-                this.playAnimation(this.IMAGES_WAITING);
-            }
-        }, 100);
     }
 
-    // jump() {
-    //     
-    // }
+    isPressedRight() {
+        return this.world.keyboard.RIGHT;
+    }
+
+    isPressedLeft() {
+        return this.world.keyboard.LEFT;
+    }
+
+    isPressedSpace() {
+        return this.world.keyboard.SPACE;
+    }
+
+    isMoreThanStartPoint() {
+        return this.x > 0;
+    }
+
+    isLowerThanWorldRange() {
+        return this.x < this.world.level.level_end_x;
+    }
 }
