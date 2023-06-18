@@ -1,7 +1,7 @@
 class Character extends MovableObject {
 
     x = 0;
-    y = 100;
+    y = 180;
     height = 250;
     width = 150;
     IMAGES_WAITING = [
@@ -27,7 +27,7 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/1_idle/long_idle/I-18.png',
         'assets/img/2_character_pepe/1_idle/long_idle/I-19.png',
         'assets/img/2_character_pepe/1_idle/long_idle/I-20.png'
-    ]
+    ];
     IMAGES_WALKING = [
         'assets/img/2_character_pepe/2_walk/W-21.png',
         'assets/img/2_character_pepe/2_walk/W-22.png',
@@ -60,7 +60,7 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/5_dead/D-55.png',
         'assets/img/2_character_pepe/5_dead/D-56.png',
         'assets/img/2_character_pepe/5_dead/D-57.png'
-    ]
+    ];
     world;
     speed = 5;
     walking_sound = new Audio('assets/audio/walk.mp3')
@@ -102,9 +102,9 @@ class Character extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD)
+                this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT)
+                this.playAnimation(this.IMAGES_HURT);
             } else if (!this.isPressedRight() && !this.isPressedLeft()) {
                 this.playAnimation(this.IMAGES_WAITING);
             } else if (this.isAboveGround()) {

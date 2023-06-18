@@ -10,15 +10,6 @@ class Bottle extends CollactableObjects {
     constructor() {
         super().loadImage(this.IMAGES_OBJECTS[0]);
         this.loadImages(this.IMAGES_OBJECTS);
-
-        this.x = 300 + Math.random() * 1700;
         // this.animate();
-    }
-
-    animate() {
-        for (let i = 0; i < this.IMAGES_OBJECTS.length; i++) {
-            const currentImage = this.IMAGES_OBJECTS[i];
-            this.playAnimation(currentImage, i);
-        }
     }
 }
