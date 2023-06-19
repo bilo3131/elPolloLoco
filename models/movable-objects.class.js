@@ -1,5 +1,4 @@
 class MovableObject extends DrawableObject {
-    
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
@@ -43,7 +42,7 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround() {
-        return this.y < 180;
+        return this.y <= 180;
     }
 
     playAnimation(images) {
@@ -51,6 +50,7 @@ class MovableObject extends DrawableObject {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+
     }
 
     jump() {
@@ -58,9 +58,16 @@ class MovableObject extends DrawableObject {
     }
 
     isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x &&
-            this.y < mo.y + mo.height;
+        return this.x + this.width - 30 > mo.x &&
+            this.y + this.height - 10 > mo.y &&
+            this.x + 30 < mo.x + mo.width &&
+            this.y - 110 < mo.yCollision;
+    }
+
+    isJumpOf(mo) {
+        return this.x + this.width - 30 > mo.x &&
+            this.y + this.height < 382.5 &&
+            this.y + this.height > 352.5 &&
+            this.x + 30 < mo.x + mo.width;
     }
 }

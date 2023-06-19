@@ -62,7 +62,7 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/5_dead/D-57.png'
     ];
     world;
-    speed = 5;
+    speed = 10;
     walking_sound = new Audio('assets/audio/walk.mp3')
 
     constructor() {
@@ -105,11 +105,11 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else if (!this.isPressedRight() && !this.isPressedLeft()) {
-                this.playAnimation(this.IMAGES_WAITING);
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-            } else if (this.isPressedRight() || this.isPressedLeft()) {
+            } else if (!this.isPressedRight() && !this.isPressedLeft()) {
+                this.playAnimation(this.IMAGES_WAITING);
+            } else if ((this.isPressedRight() || this.isPressedLeft())) {
                 this.playAnimation(this.IMAGES_WALKING);
             }
         }, 50);

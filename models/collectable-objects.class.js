@@ -1,11 +1,4 @@
 class CollactableObjects extends DrawableObject {
-    x;
-    y;
-    img;
-    height;
-    width;
-    currentImage = 0;
-    imageCache = [];
     collected = false;
 
     constructor() {

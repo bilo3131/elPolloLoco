@@ -3,6 +3,9 @@ class Chicken extends MovableObject {
     height;
     width;
     IMAGES_WALKING;
+    chickenWalkingAnimation;
+    chickenMoving;
+    yCollision;
 
     constructor() {
         super();
@@ -14,12 +17,19 @@ class Chicken extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
+        this.chickenMoving = setInterval(() => {
             this.moveLeft();
         }, 1000 / 60);
 
-        setInterval(() => {
+        this.chickenWalkingAnimation = setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 200);
+    }
+
+    isKilled(img) {
+        clearInterval(this.chickenMoving);
+        clearInterval(this.chickenWalkingAnimation);
+        this.loadImage(img);
+        this.yCollision += this;
     }
 }

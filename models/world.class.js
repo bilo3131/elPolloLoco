@@ -10,6 +10,7 @@ class World {
     keyboard;
     camera_x = 0;
     statusBar = new StatusBar();
+    colliding;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -18,17 +19,29 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollisions();
+        this.checkKill();
     }
 
     checkCollisions() {
-        setInterval(() => {
+        this.colliding = setInterval(() => {
             this.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit();
                     this.statusBar.setPercentage(this.character.energy);
                 }
             });
-        }, 200);
+        }, 300);
+    }
+    
+    checkKill() {
+        setInterval(() => {
+            this.enemies.forEach((enemy) => {
+                if (this.character.isJumpOf(enemy) && enemy instanceof Chicken) {
+                    enemy.isKilled(enemy.IMAGE_DEAD);
+                    // console.log(enemy.IMAGE_DEAD + ' killed');
+                }
+            });
+        }, 40);
     }
 
     setWorld() {
@@ -39,10 +52,12 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
-        
+
         this.addObjectsToMap(this.backgroundObjects);
         this.addObjectsToMap(this.clouds);
+
         this.ctx.translate(-this.camera_x, 0);
+
         this.addToMap(this.statusBar);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.collectables);
@@ -60,13 +75,14 @@ class World {
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
-        })
+        });
     }
 
     addToMap(mo) {
         if (mo.otherDirection) this.flipImage(mo);
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
+        mo.drawCharacterFrame(this.ctx);
         if (mo.otherDirection) this.flipImageBack(mo);
     }
 
