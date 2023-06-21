@@ -7,19 +7,24 @@ class MovableObject extends DrawableObject {
 
     applyGravity() {
         setInterval(() => {
-            if (this.isAboveGround() || this.speedY > 0) {
+            if (this.isAboveGround() || this.speedY > 0 && this.y == 180) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+            } 
+            else if (!this.isDead()) {
+                this.y = 180;   
             }
         }, 1000 / 25);
     }
 
     moveRight() {
         this.x += this.speed;
+        this.xCollision = this.x;
     }
 
     moveLeft() {
         this.x -= this.speed;
+        this.xCollision = this.x;
     }
 
     hit() {
@@ -32,7 +37,7 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.energy == 0;
+        return this.energy <= 0;
     }
 
     isHurt() {
@@ -42,7 +47,7 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround() {
-        return this.y <= 180;
+        return this.y < 180;
     }
 
     playAnimation(images) {
@@ -50,24 +55,16 @@ class MovableObject extends DrawableObject {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
-
     }
 
     jump() {
         return this.speedY = 30;
     }
 
-    isColliding(mo) {
-        return this.x + this.width - 30 > mo.x &&
-            this.y + this.height - 10 > mo.y &&
-            this.x + 30 < mo.x + mo.width &&
-            this.y - 110 < mo.yCollision;
-    }
-
     isJumpOf(mo) {
-        return this.x + this.width - 30 > mo.x &&
+        return this.x + this.width - 30 > mo.xCollision &&
             this.y + this.height < 382.5 &&
             this.y + this.height > 352.5 &&
-            this.x + 30 < mo.x + mo.width;
+            this.x + 30 < mo.xCollision + mo.widthCollision;
     }
 }

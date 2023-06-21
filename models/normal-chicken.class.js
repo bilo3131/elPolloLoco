@@ -2,7 +2,10 @@ class NormalChicken extends Chicken {
     y = 350;
     height = 80;
     width = 80;
-    yCollision = this.y + this.height;
+    xCollision;
+    yCollision = this.y;
+    widthCollision = this.width;
+    heightCollision = this.height;
     IMAGES_WALKING = [
         'assets/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
         'assets/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
@@ -12,8 +15,6 @@ class NormalChicken extends Chicken {
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
-        // if (!this.isJumpOf(this)) {
-            this.loadImages(this.IMAGES_WALKING);
-        // }
+        this.loadImages(this.IMAGES_WALKING);
     }
 }

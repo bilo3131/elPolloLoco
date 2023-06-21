@@ -62,8 +62,9 @@ class Character extends MovableObject {
         'assets/img/2_character_pepe/5_dead/D-57.png'
     ];
     world;
-    speed = 10;
-    walking_sound = new Audio('assets/audio/walk.mp3')
+    speed = 5;
+    walking_sound = new Audio('assets/audio/walk.mp3');
+    characterMoving;
 
     constructor() {
         super().loadImage(this.IMAGES_WAITING[0]);
@@ -79,7 +80,7 @@ class Character extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
+        this.characterMoving = setInterval(() => {
             // this.walking_sound.pause();
             if (this.isPressedRight() && this.isLowerThanWorldRange()) {
                 this.moveRight();
@@ -97,22 +98,37 @@ class Character extends MovableObject {
                 this.jump();
             }
 
+
+            // this.y = 180;
             this.world.camera_x = -this.x + 60;
         }, 1000 / 60);
 
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
+                this.slideOutOfMap();
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-            } else if (!this.isPressedRight() && !this.isPressedLeft()) {
-                this.playAnimation(this.IMAGES_WAITING);
+            } else if (!this.isPressedRight() && !this.isPressedLeft() && !this.isAboveGround()) {
+                this.playAnimation(this.IMAGES_WAITING_LONG);
             } else if ((this.isPressedRight() || this.isPressedLeft())) {
                 this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 50);
+        }, 80);
+
+        // setInterval(() => {
+        //     console.log(this.x);
+        // }, 3000);
+        // FIRST CONTACT ON character.x = 1740 !!!
+    }
+
+    slideOutOfMap() {
+        clearInterval(this.characterMoving);
+        this.speedY = 30;
+        this.y += this.speedY;
+        this.speedY -= this.acceleration;
     }
 
     isPressedRight() {

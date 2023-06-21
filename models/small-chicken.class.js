@@ -2,7 +2,10 @@ class SmallChicken extends Chicken {
     y = 380;
     height = 45;
     width = 45;
-    yCollision = this.y + this.height;
+    xCollision;
+    yCollision = this.y;
+    widthCollision = this.width;
+    heightCollision = this.height;
     IMAGES_WALKING = [
         'assets/img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
         'assets/img/3_enemies_chicken/chicken_small/1_walk/2_w.png',

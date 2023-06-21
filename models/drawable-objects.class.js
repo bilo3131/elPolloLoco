@@ -25,23 +25,37 @@ class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-    // drawFrame(ctx) {
-    //     if (this instanceof Chicken || this instanceof Endboss) {
-    //         ctx.beginPath();
-    //         ctx.lineWidth = '5';
-    //         ctx.strokeStyle = 'blue';
-    //         ctx.rect(this.x, this.y, this.width, this.height);
-    //         ctx.stroke();
-    //     }
-    // }
+    drawFrame(ctx) {
+        if (this instanceof Endboss) {
+            ctx.beginPath();
+            ctx.lineWidth = '5';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.xCollision, this.yCollision, this.widthCollision, this.heightCollision);
+            ctx.stroke();
+        }
+    }
     
     drawCharacterFrame(ctx) {
         if (this instanceof Character) {
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'red';
-            ctx.rect(this.x + 30, this.y + this.height - 10, this.width - 60, 0);
+            ctx.rect(this.x + 30, this.y + 100, this.width - 60, this.height - 110);
             ctx.stroke();
         }
+    }
+
+    isColliding(object) {
+        return this.x + this.width - 30 > object.xCollision &&
+            this.y + this.height - 10 > object.yCollision &&
+            this.x + 30 < object.widthCollision + object.xCollision &&
+            this.y + 100 < object.heightCollision + object.yCollision;
+    }
+
+    collect(object) {
+        object.xCollision = -150;
+        object.yCollision = -150;
+        object.x = -150;
+        object.y = -150;
     }
 }

@@ -10,7 +10,6 @@ class World {
     keyboard;
     camera_x = 0;
     statusBar = new StatusBar();
-    colliding;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -23,14 +22,20 @@ class World {
     }
 
     checkCollisions() {
-        this.colliding = setInterval(() => {
+        setInterval(() => {
             this.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit();
                     this.statusBar.setPercentage(this.character.energy);
                 }
             });
-        }, 300);
+            this.collectables.forEach((object) => {
+                if (this.character.isColliding(object)) {
+                    this.character.collect(object);
+                    console.log(object);
+                }
+            });
+        }, 250);
     }
     
     checkKill() {
@@ -38,7 +43,9 @@ class World {
             this.enemies.forEach((enemy) => {
                 if (this.character.isJumpOf(enemy) && enemy instanceof Chicken) {
                     enemy.isKilled(enemy.IMAGE_DEAD);
-                    // console.log(enemy.IMAGE_DEAD + ' killed');
+                    this.character.jump();
+                    // this.character.isAboveGround();
+                    console.log(this.character.y);
                 }
             });
         }, 40);
@@ -81,15 +88,15 @@ class World {
     addToMap(mo) {
         if (mo.otherDirection) this.flipImage(mo);
         mo.draw(this.ctx);
-        // mo.drawFrame(this.ctx);
-        mo.drawCharacterFrame(this.ctx);
+        mo.drawFrame(this.ctx);
+        // mo.drawCharacterFrame(this.ctx);
         if (mo.otherDirection) this.flipImageBack(mo);
     }
 
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
-        // this.ctx.translate(mo.collisionWidth, 0);
+        this.ctx.translate(mo.collisionWidth, 0);
         this.ctx.scale(-1, 1);
         mo.x = mo.x * - 1;
         mo.collisionX = -mo.collisionX;
