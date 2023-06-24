@@ -9,7 +9,10 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
-    statusBar = new StatusBar();
+    statusbarHealth = new StatusbarHealth();
+    statusbarCoins = new StatusbarCoins();
+    statusbarBottles = new StatusbarBottles();
+    throwableObjects = [];
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -17,35 +20,50 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.run();
         this.checkKill();
     }
 
-    checkCollisions() {
+    run() {
         setInterval(() => {
-            this.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
-                }
-            });
-            this.collectables.forEach((object) => {
-                if (this.character.isColliding(object)) {
-                    this.character.collect(object);
-                    console.log(object);
-                }
-            });
-        }, 250);
+            this.checkEnemyCollision();
+            this.checkObjectCollision();
+            this.checkThrowObjects();
+        }, 200);
     }
-    
+
+    checkThrowObjects() {
+        if (this.keyboard.D && this.statusbarBottles.percentage > 0) {
+            let bottle = new ThrowableObject(this.character.x + 60, this.character.y + 100);
+            this.throwableObjects.push(bottle);
+            this.statusbarBottles.setPercentage(this.character.collectedBottles -= 10);
+        }
+    }
+
+    checkEnemyCollision() {
+        this.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusbarHealth.setPercentage(this.character.energy);
+            }
+        });
+    }
+
+    checkObjectCollision() {
+        this.collectables.forEach((object) => {
+            if (this.character.isColliding(object)) {
+                this.character.collect(object);
+                this.statusbarCoins.setPercentage(this.character.collectedCoins);
+                this.statusbarBottles.setPercentage(this.character.collectedBottles);
+            }
+        });
+    }
+
     checkKill() {
         setInterval(() => {
             this.enemies.forEach((enemy) => {
                 if (this.character.isJumpOf(enemy) && enemy instanceof Chicken) {
-                    enemy.isKilled(enemy.IMAGE_DEAD);
-                    this.character.jump();
-                    // this.character.isAboveGround();
-                    console.log(this.character.y);
+                    enemy.killed(enemy.IMAGE_DEAD);
                 }
             });
         }, 40);
@@ -65,12 +83,17 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
-        this.addToMap(this.statusBar);
+        this.addToMap(this.statusbarHealth);
+        this.addToMap(this.statusbarCoins);
+        this.addToMap(this.statusbarBottles);
+        
         this.ctx.translate(this.camera_x, 0);
+        
         this.addObjectsToMap(this.collectables);
         this.addToMap(this.character);
         this.addObjectsToMap(this.enemies);
-
+        this.addObjectsToMap(this.throwableObjects);
+        
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
@@ -88,7 +111,7 @@ class World {
     addToMap(mo) {
         if (mo.otherDirection) this.flipImage(mo);
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
         // mo.drawCharacterFrame(this.ctx);
         if (mo.otherDirection) this.flipImageBack(mo);
     }

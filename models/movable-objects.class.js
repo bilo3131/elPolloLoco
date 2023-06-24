@@ -11,7 +11,7 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             } 
-            else if (!this.isDead()) {
+            else if (this.energy > 0) {
                 this.y = 180;   
             }
         }, 1000 / 25);
@@ -28,7 +28,7 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        this.energy -= 20;
+        this.energy -= 5;
         if (this.energy < 0) {
             this.energy = 0;
         } else {
@@ -47,14 +47,11 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround() {
-        return this.y < 180;
-    }
-
-    playAnimation(images) {
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
+        if (this instanceof ThrowableObject) {
+            return true;
+        } else {
+            return this.y < 180;
+        }
     }
 
     jump() {

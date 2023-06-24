@@ -7,6 +7,8 @@ class DrawableObject {
     height = 150;
     width = 100;
     speed = 0.15;
+    collectedBottles = 0;
+    collectedCoins = 0;
 
     loadImage(path) {
         this.img = new Image();
@@ -57,5 +59,17 @@ class DrawableObject {
         object.yCollision = -150;
         object.x = -150;
         object.y = -150;
+        if (object instanceof Bottle) {
+            this.collectedBottles += 10;
+        } else {
+            this.collectedCoins +=10;
+        }
+    }
+
+    playAnimation(images) {
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
     }
 }

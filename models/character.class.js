@@ -4,6 +4,10 @@ class Character extends MovableObject {
     y = 180;
     height = 250;
     width = 150;
+    // xCollision = this.x;
+    // yCollision = this.y;
+    // widthCollision = this.width - 60;
+    // heightCollision = this.height;
     IMAGES_WAITING = [
         'assets/img/2_character_pepe/1_idle/idle/I-1.png',
         'assets/img/2_character_pepe/1_idle/idle/I-2.png',
@@ -97,12 +101,10 @@ class Character extends MovableObject {
             if (this.isPressedSpace() && !this.isAboveGround()) {
                 this.jump();
             }
-
-
-            // this.y = 180;
+            
             this.world.camera_x = -this.x + 60;
         }, 1000 / 60);
-
+        let i = 0;
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
@@ -111,24 +113,27 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
+                i = 0;
             } else if (!this.isPressedRight() && !this.isPressedLeft() && !this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_WAITING_LONG);
+                if (i < 50) {
+                    this.playAnimation(this.IMAGES_WAITING);
+                } else {
+                    this.playAnimation(this.IMAGES_WAITING_LONG);
+                }
+                i++;
             } else if ((this.isPressedRight() || this.isPressedLeft())) {
                 this.playAnimation(this.IMAGES_WALKING);
+                i = 0;
             }
         }, 80);
-
-        // setInterval(() => {
-        //     console.log(this.x);
-        // }, 3000);
-        // FIRST CONTACT ON character.x = 1740 !!!
+        // FIRST CONTACT WITH ENDBOSS ON character.x = 1740 !!!
     }
 
     slideOutOfMap() {
         clearInterval(this.characterMoving);
-        this.speedY = 30;
-        this.y += this.speedY;
-        this.speedY -= this.acceleration;
+        setInterval(() => {
+            this.y++;
+        }, 1000 / 60);
     }
 
     isPressedRight() {
