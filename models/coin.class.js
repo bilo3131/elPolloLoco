@@ -1,7 +1,7 @@
 class Coin extends CollactableObjects {
-    y = 90 + Math.random() * 270;
-    height = 80;
-    width = 80;
+    y = 90 + Math.random() * 200;
+    height = 100;
+    width = 100;
     xCollision = this.x + 30;
     yCollision = this.y + 30;
     widthCollision = this.width - 60;

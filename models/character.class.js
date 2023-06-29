@@ -4,10 +4,11 @@ class Character extends MovableObject {
     y = 180;
     height = 250;
     width = 150;
-    // xCollision = this.x;
-    // yCollision = this.y;
-    // widthCollision = this.width - 60;
-    // heightCollision = this.height;
+    xCollision = this.x + 20;
+    yCollision = this.y + 100;
+    widthCollision = this.width - 60;
+    heightCollision = this.height - 100;
+
     IMAGES_WAITING = [
         'assets/img/2_character_pepe/1_idle/idle/I-1.png',
         'assets/img/2_character_pepe/1_idle/idle/I-2.png',
@@ -101,7 +102,7 @@ class Character extends MovableObject {
             if (this.isPressedSpace() && !this.isAboveGround()) {
                 this.jump();
             }
-            
+
             this.world.camera_x = -this.x + 60;
         }, 1000 / 60);
         let i = 0;
@@ -109,13 +110,18 @@ class Character extends MovableObject {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
                 this.slideOutOfMap();
+                setTimeout(() => {
+                    location.reload();
+                }, 5000);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
                 i = 0;
             } else if (!this.isPressedRight() && !this.isPressedLeft() && !this.isAboveGround()) {
-                if (i < 50) {
+                if (this.isPressedD()) {
+                i = 0;
+                } else if (i < 50) {
                     this.playAnimation(this.IMAGES_WAITING);
                 } else {
                     this.playAnimation(this.IMAGES_WAITING_LONG);
@@ -146,6 +152,10 @@ class Character extends MovableObject {
 
     isPressedSpace() {
         return this.world.keyboard.SPACE;
+    }
+
+    isPressedD() {
+        return this.world.keyboard.D;
     }
 
     isMoreThanStartPoint() {

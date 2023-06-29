@@ -28,7 +28,7 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Endboss) {
+        if (this instanceof Chicken) {
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'blue';
@@ -38,27 +38,25 @@ class DrawableObject {
     }
     
     drawCharacterFrame(ctx) {
-        if (this instanceof Character) {
+        if (this instanceof ThrowableObject) {
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'red';
-            ctx.rect(this.x + 30, this.y + 100, this.width - 60, this.height - 110);
+            ctx.rect(this.xCollision, this.yCollision, this.widthCollision, this.heightCollision);
             ctx.stroke();
         }
     }
 
     isColliding(object) {
-        return this.x + this.width - 30 > object.xCollision &&
-            this.y + this.height - 10 > object.yCollision &&
-            this.x + 30 < object.widthCollision + object.xCollision &&
-            this.y + 100 < object.heightCollision + object.yCollision;
+        return this.xCollision + this.widthCollision > object.xCollision &&
+            this.yCollision + this.heightCollision > object.yCollision &&
+            this.xCollision < object.widthCollision + object.xCollision &&
+            this.yCollision < object.heightCollision + object.yCollision;
     }
 
     collect(object) {
-        object.xCollision = -150;
-        object.yCollision = -150;
-        object.x = -150;
-        object.y = -150;
+        object.xCollision = -200;
+        object.x = -200;
         if (object instanceof Bottle) {
             this.collectedBottles += 10;
         } else {

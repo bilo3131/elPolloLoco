@@ -29,8 +29,7 @@ class Chicken extends MovableObject {
         clearInterval(this.chickenMoving);
         clearInterval(this.chickenWalkingAnimation);
         this.loadImage(img);
-        // this.yCollision = -100;
-        this.xCollision = -100;
+        this.xCollision = -200;
 
         setInterval(() => {
             this.y ++;

@@ -27,9 +27,11 @@ class World {
     run() {
         setInterval(() => {
             this.checkEnemyCollision();
-            this.checkObjectCollision();
             this.checkThrowObjects();
-        }, 200);
+        }, 150);
+        setInterval(() => {
+            this.checkObjectCollision();
+        }, 10);
     }
 
     checkThrowObjects() {
@@ -62,11 +64,15 @@ class World {
     checkKill() {
         setInterval(() => {
             this.enemies.forEach((enemy) => {
-                if (this.character.isJumpOf(enemy) && enemy instanceof Chicken) {
+                if ((this.character.isJumpOf(enemy) && this.character.speedY <= 0) || (this.throwableObjects.length > 0 && this.lastThrowedObjectColliding(enemy))) {
                     enemy.killed(enemy.IMAGE_DEAD);
                 }
             });
         }, 40);
+    }
+
+    lastThrowedObjectColliding(enemy) {
+        return this.throwableObjects[this.throwableObjects.length - 1].isColliding(enemy);
     }
 
     setWorld() {
@@ -119,15 +125,15 @@ class World {
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
-        this.ctx.translate(mo.collisionWidth, 0);
+        this.ctx.translate(mo.widthCollision - 110 , 0);
         this.ctx.scale(-1, 1);
         mo.x = mo.x * - 1;
-        mo.collisionX = -mo.collisionX;
+        mo.xCollision = mo.x +20;
     }
 
     flipImageBack(mo) {
         mo.x = mo.x * - 1;
-        mo.collisionX = -mo.collisionX;
+        mo.xCollision = mo.x + 20;
         this.ctx.restore();
     }
 }

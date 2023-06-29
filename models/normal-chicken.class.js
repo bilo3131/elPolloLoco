@@ -3,7 +3,7 @@ class NormalChicken extends Chicken {
     height = 80;
     width = 80;
     xCollision;
-    yCollision = this.y;
+    yCollision = this.y + 25;
     widthCollision = this.width;
     heightCollision = this.height;
     IMAGES_WALKING = [

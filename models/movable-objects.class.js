@@ -4,27 +4,34 @@ class MovableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
+    xCollision;
+    yCollision;
+    widthCollision;
+    heightCollision;
 
     applyGravity() {
         setInterval(() => {
-            if (this.isAboveGround() || this.speedY > 0 && this.y == 180) {
+            if (this.isAboveGround() || (this.speedY > 0)) {
                 this.y -= this.speedY;
+                this.yCollision -= this.speedY;
                 this.speedY -= this.acceleration;
-            } 
-            else if (this.energy > 0) {
-                this.y = 180;   
             }
         }, 1000 / 25);
     }
 
     moveRight() {
         this.x += this.speed;
-        this.xCollision = this.x;
+        this.xCollision = this.x + 20;
     }
 
     moveLeft() {
-        this.x -= this.speed;
         this.xCollision = this.x;
+        this.x -= this.speed;
+        if (this instanceof Character) {
+            this.xCollision = this.x + 20;
+        } else {
+            this.xCollision = this.x;
+        }
     }
 
     hit() {
@@ -59,9 +66,9 @@ class MovableObject extends DrawableObject {
     }
 
     isJumpOf(mo) {
-        return this.x + this.width - 30 > mo.xCollision &&
-            this.y + this.height < 382.5 &&
-            this.y + this.height > 352.5 &&
-            this.x + 30 < mo.xCollision + mo.widthCollision;
+        return this.xCollision + this.widthCollision > mo.xCollision &&
+            this.yCollision + this.heightCollision < 382.5 &&
+            this.yCollision + this.heightCollision > 352.5 &&
+            this.xCollision < mo.xCollision + mo.widthCollision;
     }
 }
