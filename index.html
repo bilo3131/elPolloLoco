@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html translate="no">
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>El Pollo Loco</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <link rel="icon" href="assets/png/favicon.png">
+    <link rel='stylesheet' type='text/css' media='screen' href='media.css'>
     <script src='models/world.class.js'></script>
     <script src='models/drawable-objects.class.js'></script>
     <script src='models/statusbar.class.js'></script>
@@ -26,35 +29,50 @@
     <script src='models/throwable-object.class.js'></script>
     <script src='models/bottle.class.js'></script>
     <script src='models/coin.class.js'></script>
-    <script src='levels/level1.js'></script>
     <script src='js/game.js'></script>
+    <script src='levels/level1.js'></script>
 </head>
-<body onload="init()">
+
+<body>
     <h1>El Pollo Loco</h1>
+
+    <div id="game" class="relative">
+        <canvas id="canvas" width="720" height="480">
+        </canvas>
+        <img onclick="info()" class="info" src="assets/png/info.png">
+        <h2 onclick="start()" id="startButton" class="start-button">Start Game</h2>
+        <img id="intro" style="height: 480px; width: 720px" class="intro" src="assets/img/9_intro_outro_screens/start/startscreen_1.png">
+        <img onclick="toggleFullscreen()" class="fullscreen" src="assets/png/fullscreen.png">
+        <img id="gameOver" class="you-lost d-none" style="height: 480px; width: 720px" src="assets/img/9_intro_outro_screens/game_over/you lost.png">
+        <div onclick="info()" id="description" class="description-container d-none">
+            <h2>KEY ASSIGNMENT</h2>
+            <div class="description">
+                <img class="border-color" src="assets/png/arrowLeft.png">
+                <img class="border-color" src="assets/png/arrowRight.png">
+                <h3>= MOVE</h3>
+            </div>
     
-    <canvas id="canvas" width="720" height="480">
-
-    </canvas>
-
-    <div class="description-container">
-        <div class="description">
-            <img class="border-color" src="assets/png/arrowLeft.png">
-            <img class="border-color" src="assets/png/arrowRight.png">
-            <img class="equal" src="assets/png/equal.png">
-            <h2>MOVE</h2>
-        </div>
-        
-        <div class="description">
-            <img class="border-color" src="assets/png/space.png">
-            <img class="equal" src="assets/png/equal.png">
-            <h2>JUMP</h2>
-        </div>
-        
-        <div class="description">
-            <img class="border-color" src="assets/png/letterD.png">
-            <img class="equal" src="assets/png/equal.png">
-            <h2>THROW BOTTLE</h2>
+            <div class="description">
+                <img class="border-color" src="assets/png/space.png">
+                <h3>= JUMP</h3>
+            </div>
+    
+            <div class="description">
+                <img class="border-color" src="assets/png/letterD.png">
+                <h3>= THROW BOTTLE</h3>
+            </div>
+    
+            <div class="description">
+                <img class="border-color" src="assets/png/arrowDown.png">
+                <h3>= TOGGLE FULLSCREEN</h3>
+            </div>
+            
+            <div class="description">
+                <h3>ENTER = START GAME</h3>
+            </div>
         </div>
     </div>
+
 </body>
+
 </html>

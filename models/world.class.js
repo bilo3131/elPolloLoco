@@ -1,10 +1,10 @@
 class World {
     character = new Character();
     level = level1;
-    enemies = level1.enemies;
-    clouds = level1.clouds;
-    backgroundObjects = level1.backgroundObjects;
-    collectables = level1.collectables;
+    enemies;
+    clouds;
+    backgroundObjects;
+    collectables;
     canvas;
     ctx;
     keyboard;
@@ -18,10 +18,11 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+
         this.draw();
-        this.setWorld();
         this.run();
         this.checkKill();
+        this.setWorld();
     }
 
     run() {
@@ -43,7 +44,7 @@ class World {
     }
 
     checkEnemyCollision() {
-        this.enemies.forEach((enemy) => {
+        this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusbarHealth.setPercentage(this.character.energy);
@@ -52,7 +53,7 @@ class World {
     }
 
     checkObjectCollision() {
-        this.collectables.forEach((object) => {
+        this.level.collectables.forEach((object) => {
             if (this.character.isColliding(object)) {
                 this.character.collect(object);
                 this.statusbarCoins.setPercentage(this.character.collectedCoins);
@@ -63,7 +64,7 @@ class World {
 
     checkKill() {
         setInterval(() => {
-            this.enemies.forEach((enemy) => {
+            this.level.enemies.forEach((enemy) => {
                 if ((this.character.isJumpOf(enemy) && this.character.speedY <= 0) || (this.throwableObjects.length > 0 && this.lastThrowedObjectColliding(enemy))) {
                     enemy.killed(enemy.IMAGE_DEAD);
                 }
@@ -84,28 +85,29 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
-        this.addObjectsToMap(this.backgroundObjects);
-        this.addObjectsToMap(this.clouds);
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.clouds);
 
         this.ctx.translate(-this.camera_x, 0);
 
         this.addToMap(this.statusbarHealth);
         this.addToMap(this.statusbarCoins);
         this.addToMap(this.statusbarBottles);
-        
+
         this.ctx.translate(this.camera_x, 0);
-        
-        this.addObjectsToMap(this.collectables);
+
+        this.addObjectsToMap(this.level.collectables);
         this.addToMap(this.character);
-        this.addObjectsToMap(this.enemies);
+        this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObjects);
-        
+
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
         });
+
     }
 
     addObjectsToMap(objects) {
@@ -117,18 +119,18 @@ class World {
     addToMap(mo) {
         if (mo.otherDirection) this.flipImage(mo);
         mo.draw(this.ctx);
-        // mo.drawFrame(this.ctx);
-        // mo.drawCharacterFrame(this.ctx);
+        mo.drawFrame(this.ctx);
+        mo.drawCharacterFrame(this.ctx);
         if (mo.otherDirection) this.flipImageBack(mo);
     }
 
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
-        this.ctx.translate(mo.widthCollision - 110 , 0);
+        this.ctx.translate(mo.widthCollision - 110, 0);
         this.ctx.scale(-1, 1);
         mo.x = mo.x * - 1;
-        mo.xCollision = mo.x +20;
+        mo.xCollision = mo.x + 20;
     }
 
     flipImageBack(mo) {

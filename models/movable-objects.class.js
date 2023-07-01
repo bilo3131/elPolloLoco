@@ -25,12 +25,10 @@ class MovableObject extends DrawableObject {
     }
 
     moveLeft() {
-        this.xCollision = this.x;
         this.x -= this.speed;
+        this.xCollision = this.x;
         if (this instanceof Character) {
             this.xCollision = this.x + 20;
-        } else {
-            this.xCollision = this.x;
         }
     }
 

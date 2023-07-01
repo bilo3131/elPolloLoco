@@ -1,0 +1,26 @@
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+    .intro {
+        width: 100%;
+    }
+    h1 {
+        display: none;
+    }
+    .description-container {
+        display: none;
+    }
+    .fullscreen {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
+    .intro {
+        height: 100vh;
+    }
+}

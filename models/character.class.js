@@ -81,6 +81,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
 
         this.applyGravity();
+
         this.animate();
     }
 
@@ -111,8 +112,8 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_DEAD);
                 this.slideOutOfMap();
                 setTimeout(() => {
-                    location.reload();
-                }, 5000);
+                    document.getElementById('gameOver').classList.remove('d-none');
+                }, 1000);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
@@ -120,7 +121,7 @@ class Character extends MovableObject {
                 i = 0;
             } else if (!this.isPressedRight() && !this.isPressedLeft() && !this.isAboveGround()) {
                 if (this.isPressedD()) {
-                i = 0;
+                    i = 0;
                 } else if (i < 50) {
                     this.playAnimation(this.IMAGES_WAITING);
                 } else {

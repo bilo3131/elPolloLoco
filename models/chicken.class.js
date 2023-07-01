@@ -5,7 +5,7 @@ class Chicken extends MovableObject {
     IMAGES_WALKING;
     chickenWalkingAnimation;
     chickenMoving;
-    
+
     constructor() {
         super();
 
@@ -32,7 +32,7 @@ class Chicken extends MovableObject {
         this.xCollision = -200;
 
         setInterval(() => {
-            this.y ++;
+            this.y++;
         }, 1000 / 60);
     }
 }
