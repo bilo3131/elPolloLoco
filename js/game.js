@@ -3,6 +3,7 @@ let world;
 let keyboard = new Keyboard();
 let isFullscreen = false;
 let gameStarted = false;
+let mute = false;
 
 function init() {
    initLevel();
@@ -26,6 +27,16 @@ function toggleFullscreen() {
    }
 }
 
+function volume() {
+   if (!mute) {
+      document.getElementById('volume').src = 'assets/png/mute.png';
+      mute = true;
+   } else {
+      document.getElementById('volume').src = 'assets/png/volume.png';
+      mute = false;
+   }
+}
+
 function info() {
    document.getElementById('description').classList.toggle('d-none');
 }
@@ -40,6 +51,7 @@ function exitFs() {
    document.exitFullscreen();
    scaleWindow('480px', '720px');
    isFullscreen = false;
+   clearInterval(intervaltest);
 }
 
 function scaleWindow(height, width) {
@@ -49,8 +61,11 @@ function scaleWindow(height, width) {
    document.getElementById('gameOver').style.width = `${width}`;
 }
 
+function backToMenu() {
+   location.reload();
+}
+
 window.addEventListener('keydown', (e) => {
-   console.log(e);
    if (e.code == 'ArrowRight') {
       keyboard.RIGHT = true;
    }
@@ -67,7 +82,7 @@ window.addEventListener('keydown', (e) => {
       keyboard.D = true;
    }
    
-   if (e.code == 'Enter' && !gameStarted) {
+   if ((e.code == 'Enter' || e.code == 'NumpadEnter') && !gameStarted) {
       start();
       gameStarted = true;
    }

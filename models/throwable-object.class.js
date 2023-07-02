@@ -30,10 +30,6 @@ class ThrowableObject extends MovableObject {
         this.throw();
     }
 
-    checkPositionBottle() {
-
-    }
-
     splashBottle() {
         this.speedY = 0;
         setInterval(() => {
@@ -43,16 +39,13 @@ class ThrowableObject extends MovableObject {
 
     throw() {
         this.applyGravity();
-        this.speedY = 30;
+        this.speedY = 20;
 
         setInterval(() => {
             if (this.isOnAir()) {
                 this.x += 10;
                 this.xCollision += 10;
-            } else if (this.isColliding(this instanceof Chicken)) {
-                console.log(this.collect);
-            }
-            else {
+            } else {
                 this.speedY = 0
             }
         }, 25);
@@ -60,14 +53,17 @@ class ThrowableObject extends MovableObject {
         let i = 0;
         setInterval(() => {
             if (this.isOnAir()) {
-                this.playAnimation(this.IMAGES_THROWING);
-                i = 0;
-            } else if (i < 1) {
+                if (!(this.xCollision >= world.endboss.xCollision)) {
+                    this.playAnimation(this.IMAGES_THROWING);
+                    i = 0;
+                }
+            } else if (i == 0) {
                 this.playAnimation(this.IMAGES_SPLASHING);
                 i++;
             } else {
                 this.x = -800;
                 this.xCollision = -800;
+                this.speedY = 0;
             }
         }, 100);
     }

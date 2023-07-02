@@ -1,10 +1,11 @@
 class World {
     character = new Character();
     level = level1;
-    enemies;
-    clouds;
-    backgroundObjects;
-    collectables;
+    enemies = this.level.enemies;
+    endboss = this.enemies[this.enemies.length - 1]
+    clouds = this.level.clouds;
+    backgroundObjects = this.level.backgroundObjects;
+    collectables = this.level.collectables;
     canvas;
     ctx;
     keyboard;
@@ -12,7 +13,9 @@ class World {
     statusbarHealth = new StatusbarHealth();
     statusbarCoins = new StatusbarCoins();
     statusbarBottles = new StatusbarBottles();
+    // statusbarEndboss = new StatusbarEndboss();
     throwableObjects = [];
+    intervaltest;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -21,16 +24,17 @@ class World {
 
         this.draw();
         this.run();
-        this.checkKill();
+        // this.checkEnemyHit();
         this.setWorld();
     }
 
     run() {
-        setInterval(() => {
+        this.intervaltest = setInterval(() => {
             this.checkEnemyCollision();
             this.checkThrowObjects();
         }, 150);
         setInterval(() => {
+            this.checkEnemyHit();
             this.checkObjectCollision();
         }, 10);
     }
@@ -44,8 +48,8 @@ class World {
     }
 
     checkEnemyCollision() {
-        this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
+        this.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy) && !(this.character.endbossIsDead)) {
                 this.character.hit();
                 this.statusbarHealth.setPercentage(this.character.energy);
             }
@@ -53,7 +57,7 @@ class World {
     }
 
     checkObjectCollision() {
-        this.level.collectables.forEach((object) => {
+        this.collectables.forEach((object) => {
             if (this.character.isColliding(object)) {
                 this.character.collect(object);
                 this.statusbarCoins.setPercentage(this.character.collectedCoins);
@@ -62,14 +66,16 @@ class World {
         });
     }
 
-    checkKill() {
-        setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if ((this.character.isJumpOf(enemy) && this.character.speedY <= 0) || (this.throwableObjects.length > 0 && this.lastThrowedObjectColliding(enemy))) {
+    checkEnemyHit() {
+        // setInterval(() => {
+            this.enemies.forEach((enemy) => {
+                if ((this.character.isJumpOf(enemy) && this.character.speedY <= 0 && enemy instanceof Chicken) || (this.throwableObjects.length > 0 && this.lastThrowedObjectColliding(enemy) && enemy instanceof Chicken)) {
                     enemy.killed(enemy.IMAGE_DEAD);
+                } else if (this.throwableObjects.length > 0 && enemy instanceof Endboss && this.lastThrowedObjectColliding(this.endboss)) {
+                    this.endboss.hit();
                 }
             });
-        }, 40);
+        // }, 40);
     }
 
     lastThrowedObjectColliding(enemy) {
@@ -78,6 +84,7 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.endboss.world = this;
     }
 
     draw() {
@@ -85,8 +92,8 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.clouds);
 
         this.ctx.translate(-this.camera_x, 0);
 
@@ -96,9 +103,10 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
-        this.addObjectsToMap(this.level.collectables);
+        this.addObjectsToMap(this.collectables);
         this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.enemies);
+        this.addToMap(this.endboss);
         this.addObjectsToMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -119,8 +127,8 @@ class World {
     addToMap(mo) {
         if (mo.otherDirection) this.flipImage(mo);
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
-        mo.drawCharacterFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
+        // mo.drawCharacterFrame(this.ctx);
         if (mo.otherDirection) this.flipImageBack(mo);
     }
 

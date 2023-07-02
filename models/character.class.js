@@ -8,6 +8,9 @@ class Character extends MovableObject {
     yCollision = this.y + 100;
     widthCollision = this.width - 60;
     heightCollision = this.height - 100;
+    firstContact = 1825;
+    characterMoving;
+    characterAnimation;
 
     IMAGES_WAITING = [
         'assets/img/2_character_pepe/1_idle/idle/I-1.png',
@@ -69,7 +72,6 @@ class Character extends MovableObject {
     world;
     speed = 5;
     walking_sound = new Audio('assets/audio/walk.mp3');
-    characterMoving;
 
     constructor() {
         super().loadImage(this.IMAGES_WAITING[0]);
@@ -83,6 +85,7 @@ class Character extends MovableObject {
         this.applyGravity();
 
         this.animate();
+        this.clearIntervals();
     }
 
     animate() {
@@ -104,15 +107,22 @@ class Character extends MovableObject {
                 this.jump();
             }
 
+            if (this.x > this.world.endboss.behindEndboss) {
+                this.energy = 0;
+                this.world.statusbarHealth.setPercentage(this.energy);
+            }
+
             this.world.camera_x = -this.x + 60;
         }, 1000 / 60);
         let i = 0;
-        setInterval(() => {
+        this.characterAnimation = setInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-                this.slideOutOfMap();
+                this.slideOutOfMap(this.characterMoving);
+                this.characterIsDead = true;
                 setTimeout(() => {
-                    document.getElementById('gameOver').classList.remove('d-none');
+                    document.getElementById('youLost').classList.remove('d-none');
+                    document.getElementById('backToMenu').classList.remove('d-none');
                 }, 1000);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
@@ -133,14 +143,6 @@ class Character extends MovableObject {
                 i = 0;
             }
         }, 80);
-        // FIRST CONTACT WITH ENDBOSS ON character.x = 1740 !!!
-    }
-
-    slideOutOfMap() {
-        clearInterval(this.characterMoving);
-        setInterval(() => {
-            this.y++;
-        }, 1000 / 60);
     }
 
     isPressedRight() {

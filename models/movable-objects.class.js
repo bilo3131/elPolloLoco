@@ -8,6 +8,10 @@ class MovableObject extends DrawableObject {
     yCollision;
     widthCollision;
     heightCollision;
+    characterPositionX;
+    sawBoss = false;
+    characterIsDead = false;
+    enbossIsDead = false;
 
     applyGravity() {
         setInterval(() => {
@@ -22,6 +26,8 @@ class MovableObject extends DrawableObject {
     moveRight() {
         this.x += this.speed;
         this.xCollision = this.x + 20;
+        this.characterPositionX = this.xCollision;
+        this.checkFirstContact();
     }
 
     moveLeft() {
@@ -29,7 +35,36 @@ class MovableObject extends DrawableObject {
         this.xCollision = this.x;
         if (this instanceof Character) {
             this.xCollision = this.x + 20;
+            this.characterPositionX = this.xCollision;
+        } else if (this instanceof Endboss) {
+            this.behindEndboss = this.xCollision + this.width;
         }
+    }
+
+    slideOutOfMap(intervalToEnd) {
+        // clearInterval(intervalToEnd);
+        setInterval(() => {
+            this.y++;
+        }, 1000 / 60);
+    }
+
+    checkFirstContact() {
+        if (this.x >= this.firstContact) {
+            this.sawBoss = true;
+        }
+    }
+
+    clearIntervals() {
+        setInterval(() => {
+            if (this.enbossIsDead) {
+                clearInterval(world.character.characterMoving);
+                clearInterval(world.character.characterAnimation);
+                world.character.yCollision = -800;
+            } else if (this.characterIsDead) {
+                clearInterval(world.endboss.endbossAnimation);
+                clearInterval(world.endboss.enbossMoving);
+            }
+        }, 10);
     }
 
     hit() {
