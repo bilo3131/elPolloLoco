@@ -5,6 +5,40 @@ let isFullscreen = false;
 let gameStarted = false;
 let mute = false;
 
+window.addEventListener('DOMContentLoaded', function () {
+   left = document.getElementById('left');
+   left.addEventListener('touchstart', function () {
+      keyboard.LEFT = true;
+   });
+   left.addEventListener('touchend', function () {
+      keyboard.LEFT = false;
+   });
+
+   right = document.getElementById('right');
+   right.addEventListener('touchstart', function () {
+      keyboard.RIGHT = true;
+   });
+   right.addEventListener('touchend', function () {
+      keyboard.RIGHT = false;
+   });
+
+   jump = document.getElementById('jump');
+   jump.addEventListener('touchstart', function () {
+      keyboard.SPACE = true;
+   });
+   jump.addEventListener('touchend', function () {
+      keyboard.SPACE = false;
+   });
+
+   throwing = document.getElementById('throwing');
+   throwing.addEventListener('touchstart', function () {
+      keyboard.D = true;
+   });
+   throwing.addEventListener('touchend', function () {
+      keyboard.D = false;
+   });
+});
+
 function init() {
    initLevel();
    canvas = document.getElementById('canvas');
@@ -81,7 +115,7 @@ window.addEventListener('keydown', (e) => {
    if (e.code == 'KeyD') {
       keyboard.D = true;
    }
-   
+
    if ((e.code == 'Enter' || e.code == 'NumpadEnter') && !gameStarted) {
       start();
       gameStarted = true;

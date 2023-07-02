@@ -19,6 +19,11 @@ body {
     height: 100vh;
     background-repeat: no-repeat;
     font-family: Impact, 'Arial Narrow Bold', sans-serif;
+    user-select: none;
+}
+
+.rotate-background-color {
+    display: none;
 }
 
 .volume {
@@ -33,6 +38,33 @@ body {
 .intro {
     position: absolute;
     z-index: 2;
+    /* display: none; */
+}
+
+.touch {
+    position: absolute;
+    height: 50px;
+    bottom: -60px;
+    right: 10px;
+    left: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.touch-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.touch-buttons img {
+    background-color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 100%;
+}
+
+.touch-buttons img:hover {
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .info {

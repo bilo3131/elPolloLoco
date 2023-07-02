@@ -36,9 +36,22 @@
 <body>
     <h1>El Pollo Loco</h1>
 
+    <div class="rotate-background-color">
+        <img class="rotateDevice" src="assets/img/rotateDevice.png">
+    </div>
     <div id="game" class="relative">
         <canvas id="canvas" width="720" height="480">
         </canvas>
+        <div class="touch">
+            <div class="touch-buttons">
+                <img id="left" src="assets/png/arrowLeft.png">
+                <img id="right" src="assets/png/arrowRight.png">
+            </div>
+            <div class="touch-buttons">
+                <img id="jump" src="assets/png/jump.png">
+                <img id="throwing" src="assets/png/bottle.png">
+            </div>
+        </div>
         <img onclick="info()" class="info" src="assets/png/info.png">
         <img id="volume" onclick="volume()" class="volume" src="assets/png/volume.png">
         <h2 onclick="start()" id="startButton" class="button">Start Game</h2>
