@@ -7,60 +7,24 @@ class Endboss extends MovableObject {
     widthCollision = this.width;
     heightCollision = this.height;
     behindEndboss;
-    enbossMoving;
+    endbossMoving;
     endbossAnimation;
     world;
-    speed = 2.5;
-    energy = 400;
-
-    IMAGES_WALKING = [
-        'assets/img/4_enemie_boss_chicken/1_walk/G1.png',
-        'assets/img/4_enemie_boss_chicken/1_walk/G2.png',
-        'assets/img/4_enemie_boss_chicken/1_walk/G3.png',
-        'assets/img/4_enemie_boss_chicken/1_walk/G4.png'
-    ];
-
-    IMAGES_ALERT = [
-        'assets/img/4_enemie_boss_chicken/2_alert/G5.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G6.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G7.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G8.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G9.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G10.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G11.png',
-        'assets/img/4_enemie_boss_chicken/2_alert/G12.png'
-    ];
-
-    IMAGES_ATTACK = [
-        'assets/img/4_enemie_boss_chicken/3_attack/G13.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G14.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G15.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G16.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G17.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G18.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G19.png',
-        'assets/img/4_enemie_boss_chicken/3_attack/G20.png'
-    ];
-
-    IMAGES_HURT = [
-        'assets/img/4_enemie_boss_chicken/4_hurt/G21.png',
-        'assets/img/4_enemie_boss_chicken/4_hurt/G22.png',
-        'assets/img/4_enemie_boss_chicken/4_hurt/G23.png'
-    ];
-
-    IMAGES_DEAD = [
-        'assets/img/4_enemie_boss_chicken/5_dead/G24.png',
-        'assets/img/4_enemie_boss_chicken/5_dead/G25.png',
-        'assets/img/4_enemie_boss_chicken/5_dead/G26.png'
-    ];
+    energy = 41;
+    images = imagesEndboss;
+    walking = this.images.walking;
+    alert = this.images.alert;
+    attack = this.images.attack;
+    hurt = this.images.hurt;
+    dead = this.images.dead;
 
     constructor() {
-        super().loadImage(this.IMAGES_ALERT[0]);
-        this.loadImages(this.IMAGES_ALERT);
-        this.loadImages(this.IMAGES_WALKING);
-        this.loadImages(this.IMAGES_ATTACK);
-        this.loadImages(this.IMAGES_DEAD);
-        this.loadImages(this.IMAGES_HURT);
+        super().loadImage(this.alert[0]);
+        this.loadImages(this.alert);
+        this.loadImages(this.walking);
+        this.loadImages(this.attack);
+        this.loadImages(this.dead);
+        this.loadImages(this.hurt);
         this.x = 2300;
         this.xCollision = this.x;
 
@@ -69,38 +33,63 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        let i = 0
-
-        this.enbossMoving = setInterval(() => {
+        let i = 0;
+        let j = 0;
+        this.endbossMoving = setInterval(() => {
             if (this.world.character.sawBoss && i > 14) {
                 this.moveLeft();
+                // console.log(i);
             }
         }, 1000 / 60);
 
         this.endbossAnimation = setInterval(() => {
             if (!this.world.character.sawBoss) {
-                this.playAnimation(this.IMAGES_ALERT);
+                this.playAnimation(this.alert);
             } else if (this.isDead()) {
-                this.slideOutOfMap(this.enbossMoving);
-                this.playAnimation(this.IMAGES_DEAD);
-                this.enbossIsDead = true;
+                sounds[chicken_damage_sound.pause()];
+                this.slideOutOfMap(this.endbossMoving);
+                this.playAnimation(this.dead);
+                this.endbossIsDead = true;
+
                 setTimeout(() => {
                     document.getElementById('gameOver').classList.remove('d-none');
                     document.getElementById('backToMenu').classList.remove('d-none');
                 }, 1000);
             } else if (this.isHurt()) {
-                this.speed = 0;
-                console.log(this.energy);
-                this.playAnimation(this.IMAGES_HURT);
+                j++;
+                if (j < 11) {
+                    sounds[chicken_damage_sound.play()];
+                    this.energy--;
+                    this.playAnimation(this.hurt);
+                    this.speed = 0;
+                    this.checkLife();
+                }
             } else {
                 if (i < 15) {
-                    this.playAnimation(this.IMAGES_ATTACK);
+                    this.playAnimation(this.attack);
                     i++;
                 } else {
-                    this.speed = 2.5;
-                    this.playAnimation(this.IMAGES_WALKING);
+                    this.speed = 3;
+                    this.playAnimation(this.walking);
+                    j = 0;
                 }
             }
         }, 100);
+    }
+
+    checkLife() {
+        if (this.energy == 41) {
+            document.getElementById('life').innerHTML = '5';
+        } else if (this.energy > 30) {
+            document.getElementById('life').innerHTML = '4';
+        } else if (this.energy > 20) {
+            document.getElementById('life').innerHTML = '3';
+        } else if (this.energy > 10) {
+            document.getElementById('life').innerHTML = '2';
+        } else if (this.energy > 0) {
+            document.getElementById('life').innerHTML = '1';
+        } else {
+            document.getElementById('life').innerHTML = '0';
+        }
     }
 }

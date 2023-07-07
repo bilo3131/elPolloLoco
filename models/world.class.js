@@ -13,9 +13,8 @@ class World {
     statusbarHealth = new StatusbarHealth();
     statusbarCoins = new StatusbarCoins();
     statusbarBottles = new StatusbarBottles();
-    // statusbarEndboss = new StatusbarEndboss();
     throwableObjects = [];
-    intervaltest;
+    objectIsThrowable = true;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -24,14 +23,13 @@ class World {
 
         this.draw();
         this.run();
-        // this.checkEnemyHit();
         this.setWorld();
     }
 
     run() {
-        this.intervaltest = setInterval(() => {
+        setInterval(() => {
             this.checkEnemyCollision();
-            this.checkThrowObjects();
+            this.throwObject();
         }, 150);
         setInterval(() => {
             this.checkEnemyHit();
@@ -39,10 +37,12 @@ class World {
         }, 10);
     }
 
-    checkThrowObjects() {
-        if (this.keyboard.D && this.statusbarBottles.percentage > 0) {
+    throwObject() {
+        if (this.keyboard.D && this.statusbarBottles.percentage > 0 && this.objectIsThrowable) {
+            sounds[throw_sound.play()];
             let bottle = new ThrowableObject(this.character.x + 60, this.character.y + 100);
             this.throwableObjects.push(bottle);
+            // bottle.speedY = 20;
             this.statusbarBottles.setPercentage(this.character.collectedBottles -= 10);
         }
     }
@@ -67,15 +67,14 @@ class World {
     }
 
     checkEnemyHit() {
-        // setInterval(() => {
-            this.enemies.forEach((enemy) => {
-                if ((this.character.isJumpOf(enemy) && this.character.speedY <= 0 && enemy instanceof Chicken) || (this.throwableObjects.length > 0 && this.lastThrowedObjectColliding(enemy) && enemy instanceof Chicken)) {
-                    enemy.killed(enemy.IMAGE_DEAD);
-                } else if (this.throwableObjects.length > 0 && enemy instanceof Endboss && this.lastThrowedObjectColliding(this.endboss)) {
-                    this.endboss.hit();
-                }
-            });
-        // }, 40);
+        this.enemies.forEach((enemy) => {
+            if ((this.character.isJumpOf(enemy) && this.character.speedY <= 0 && enemy instanceof Chicken) || (this.throwableObjects.length > 0 && this.lastThrowedObjectColliding(enemy) && enemy instanceof Chicken)) {
+                enemy.killed(enemy.IMAGE_DEAD);
+            } else if (this.throwableObjects.length > 0 && enemy instanceof Endboss && this.lastThrowedObjectColliding(this.endboss) && this.endboss.energy > 0) {
+                this.endboss.hit();
+                // console.log(this.endboss.energy);
+            }
+        });
     }
 
     lastThrowedObjectColliding(enemy) {

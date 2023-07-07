@@ -11,7 +11,7 @@ class MovableObject extends DrawableObject {
     characterPositionX;
     sawBoss = false;
     characterIsDead = false;
-    enbossIsDead = false;
+    endbossIsDead = false;
 
     applyGravity() {
         setInterval(() => {
@@ -42,7 +42,7 @@ class MovableObject extends DrawableObject {
     }
 
     slideOutOfMap(intervalToEnd) {
-        // clearInterval(intervalToEnd);
+        clearInterval(intervalToEnd);
         setInterval(() => {
             this.y++;
         }, 1000 / 60);
@@ -51,16 +51,27 @@ class MovableObject extends DrawableObject {
     checkFirstContact() {
         if (this.x >= this.firstContact) {
             this.sawBoss = true;
+            document.getElementById('endbossHealth').classList.remove('d-none');
         }
     }
 
     clearIntervals() {
+        let i = 0;
         setInterval(() => {
-            if (this.enbossIsDead) {
+            if (this.endbossIsDead) {
+                i++;
                 clearInterval(world.character.characterMoving);
                 clearInterval(world.character.characterAnimation);
+                sounds[walking_sound.pause()];
                 world.character.yCollision = -800;
+                if (i == 100) {
+                    sounds[win_sound.play()];
+                }
             } else if (this.characterIsDead) {
+                i++;
+                if (i == 100) {
+                    sounds[lose_sound.play()];
+                }
                 clearInterval(world.endboss.endbossAnimation);
                 clearInterval(world.endboss.enbossMoving);
             }
@@ -68,17 +79,23 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        this.energy -= 5;
-        if (this.energy < 0) {
-            this.energy = 0;
-        } else {
+        if (this instanceof Character) {
+            this.energy -= 5;
+        }
+        if (this.energy > 0) {
             this.lastHit = new Date().getTime();
+        } else {
+            this.energy = 0;
         }
     }
 
     isDead() {
         return this.energy <= 0;
     }
+
+    // hittedEndboss() {
+
+    // }
 
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit;
@@ -88,7 +105,7 @@ class MovableObject extends DrawableObject {
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
-            return true;
+            return this.y < 347;
         } else {
             return this.y < 180;
         }

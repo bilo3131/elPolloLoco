@@ -26,6 +26,7 @@ class Chicken extends MovableObject {
     }
 
     killed(img) {
+        sounds[chicken_dead_sound.play()];
         clearInterval(this.chickenMoving);
         clearInterval(this.chickenWalkingAnimation);
         this.loadImage(img);

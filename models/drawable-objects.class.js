@@ -27,25 +27,25 @@ class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-    drawFrame(ctx) {
-        if (this instanceof Chicken) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.xCollision, this.yCollision, this.widthCollision, this.heightCollision);
-            ctx.stroke();
-        }
-    }
+    // drawFrame(ctx) {
+    //     if (this instanceof Chicken) {
+    //         ctx.beginPath();
+    //         ctx.lineWidth = '5';
+    //         ctx.strokeStyle = 'blue';
+    //         ctx.rect(this.xCollision, this.yCollision, this.widthCollision, this.heightCollision);
+    //         ctx.stroke();
+    //     }
+    // }
     
-    drawCharacterFrame(ctx) {
-        if (this instanceof ThrowableObject) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'red';
-            ctx.rect(this.xCollision, this.yCollision, this.widthCollision, this.heightCollision);
-            ctx.stroke();
-        }
-    }
+    // drawCharacterFrame(ctx) {
+    //     if (this instanceof ThrowableObject) {
+    //         ctx.beginPath();
+    //         ctx.lineWidth = '5';
+    //         ctx.strokeStyle = 'red';
+    //         ctx.rect(this.xCollision, this.yCollision, this.widthCollision, this.heightCollision);
+    //         ctx.stroke();
+    //     }
+    // }
 
     isColliding(object) {
         return this.xCollision + this.widthCollision > object.xCollision &&
@@ -58,8 +58,10 @@ class DrawableObject {
         object.xCollision = -200;
         object.x = -200;
         if (object instanceof Bottle) {
+            sounds[bottle_sound.play()];
             this.collectedBottles += 10;
         } else {
+            sounds[coin_sound.play()];
             this.collectedCoins +=10;
         }
     }

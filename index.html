@@ -17,6 +17,7 @@
     <script src='models/statusbar-health.class.js'></script>
     <script src='models/movable-objects.class.js'></script>
     <script src='models/character.class.js'></script>
+    <script src='models/character-images.class.js'></script>
     <script src='models/chicken.class.js'></script>
     <script src='models/small-chicken.class.js'></script>
     <script src='models/normal-chicken.class.js'></script>
@@ -25,11 +26,15 @@
     <script src='models/keyboard.class.js'></script>
     <script src='models/level.class.js'></script>
     <script src='models/endboss.class.js'></script>
+    <script src='models/endboss-images.class.js'></script>
     <script src='models/collectable-objects.class.js'></script>
     <script src='models/throwable-object.class.js'></script>
     <script src='models/bottle.class.js'></script>
     <script src='models/coin.class.js'></script>
     <script src='js/game.js'></script>
+    <script src='js/sounds.js'></script>
+    <script src='levels/character-images.js'></script>
+    <script src='levels/endboss-images.js'></script>
     <script src='levels/level1.js'></script>
 </head>
 
@@ -52,13 +57,17 @@
                 <img id="throwing" src="assets/png/bottle.png">
             </div>
         </div>
-        <img onclick="info()" class="info" src="assets/png/info.png">
-        <img id="volume" onclick="volume()" class="volume" src="assets/png/volume.png">
-        <h2 onclick="start()" id="startButton" class="button">Start Game</h2>
+        <img id="info" class="info" src="assets/png/info.png">
+        <img id="volume" class="volume" src="assets/png/volume.png">
+        <h2 id="startGame" class="button">Start Game</h2>
         <img id="intro" style="height: 480px; width: 720px" class="intro" src="assets/img/9_intro_outro_screens/start/startscreen_1.png">
+        <div class="endboss-health d-none" id="endbossHealth">
+            <img src="assets/img/7_statusbars/3_icons/icon_health_endboss.png">
+            <div id="life">5</div>
+        </div>
         <img onclick="toggleFullscreen()" class="fullscreen" src="assets/png/fullscreen.png">
-        <img id="youLost" class="you-lost d-none" style="height: 480px; width: 720px" src="assets/img/9_intro_outro_screens/game_over/you lost.png">
-        <img id="gameOver" class="you-lost d-none" style="height: 480px; width: 720px" src="assets/img/9_intro_outro_screens/game_over/game over.png">
+        <img id="youLost" class="end-game d-none" style="height: 480px; width: 720px" src="assets/img/9_intro_outro_screens/game_over/you lost.png">
+        <img id="gameOver" class="end-game d-none" style="height: 480px; width: 720px" src="assets/img/9_intro_outro_screens/game_over/game over.png">
         <h2 onclick="backToMenu()" id="backToMenu" class="button d-none">Back To Menu</h2>
         <div onclick="info()" id="description" class="description-container d-none">
             <h2>KEY ASSIGNMENT</h2>

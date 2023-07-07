@@ -3,6 +3,11 @@
     src: url('assets/fonts/zabars.ttf');
 }
 
+@font-face {
+    font-family: 'boogaloo';
+    src: url('assets/fonts/Boogaloo-Regular.ttf');
+}
+
 .d-none {
     display: none !important;
 }
@@ -18,7 +23,7 @@ body {
     background-size: cover;
     height: 100vh;
     background-repeat: no-repeat;
-    font-family: Impact, 'Arial Narrow Bold', sans-serif;
+    font-family: 'boogaloo', 'Arial Narrow Bold', sans-serif;
     user-select: none;
 }
 
@@ -76,7 +81,7 @@ body {
     cursor: pointer;
 }
 
-.you-lost {
+.end-game {
     position: absolute;
     object-fit: cover;
     z-index: 3;
@@ -87,7 +92,7 @@ body {
     top: 30px;
     z-index: 3;
     font-size: 32px;
-    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    font-family: 'boogaloo', Arial, Helvetica, sans-serif;
     font-weight: 900;
     letter-spacing: 5px;
     cursor: pointer;
@@ -129,6 +134,20 @@ canvas {
     right: 20px;
     cursor: pointer;
     z-index: 2;
+}
+
+.endboss-health {
+    position: absolute;
+    right: 20px;
+    top: 70px;
+    color: aliceblue;
+    display: flex;
+    gap: 10px;
+    font-size: 35px;
+    text-shadow: 0px 0px 5px black;
+}
+.endboss-health img {
+    height: 50px;
 }
 
 .fullscreen:hover, .volume:hover, .info:hover {

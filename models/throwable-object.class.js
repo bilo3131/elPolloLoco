@@ -18,6 +18,10 @@ class ThrowableObject extends MovableObject {
     width = 70;
     heightCollision = this.height - 30;
     widthCollision = this.width - 30;
+    speedX = 10;
+    speedY = 20;
+    lookRight = true;
+    direction;
 
     constructor(x, y) {
         super().loadImage(this.IMAGES_THROWING[0]);
@@ -30,46 +34,57 @@ class ThrowableObject extends MovableObject {
         this.throw();
     }
 
-    splashBottle() {
-        this.speedY = 0;
-        setInterval(() => {
-            this.playAnimation(this.IMAGES_SPLASHING);
-        }, 100);
-    }
-
     throw() {
         this.applyGravity();
         this.speedY = 20;
+        if (world.character.otherDirection) {
+            this.lookRight = false;
+        }
 
-        setInterval(() => {
-            if (this.isOnAir()) {
-                this.x += 10;
-                this.xCollision += 10;
+        this.direction = setInterval(() => {
+            if (this.isAboveGround() && !this.hurtEndboss()) {
+                if (this.lookRight) {
+                    this.x += this.speedX;
+                    this.xCollision += this.speedX;
+                } else {
+                    this.x -= this.speedX;
+                    this.xCollision -= this.speedX;
+                }
             } else {
                 this.speedY = 0
             }
         }, 25);
 
         let i = 0;
+        let j = 0;
         setInterval(() => {
-            if (this.isOnAir()) {
-                if (!(this.xCollision >= world.endboss.xCollision)) {
-                    this.playAnimation(this.IMAGES_THROWING);
+            if (this.hurtEndboss() || !this.isAboveGround()) {
+                world.objectIsThrowable = true;
+                this.xCollision = -800;
+                if (i < 6) {
+                    j++;
+                    if (j == 1) {
+                        sounds[bottle_splash.play()];
+                    }
+                    this.playAnimation(this.IMAGES_SPLASHING);
+                    this.speedY = 0;
+                    this.speedX = 0
+                    i++;
+                } else {
+                    this.x = -800;
                     i = 0;
                 }
-            } else if (i == 0) {
-                this.playAnimation(this.IMAGES_SPLASHING);
-                i++;
-            } else {
-                this.x = -800;
-                this.xCollision = -800;
-                this.speedY = 0;
-            }
+            } else if (this.isAboveGround()) {
+                if (!this.hurtEndboss()) {
+                    world.objectIsThrowable = false;
+                    this.playAnimation(this.IMAGES_THROWING);
+                }
+            } 
         }, 100);
     }
 
-    isOnAir() {
-        return this.y < 347;
+    hurtEndboss() {
+        return world.endboss.isHurt();
     }
 }
 
