@@ -1,18 +1,36 @@
 class MovableObject extends DrawableObject {
+    /** For checking if the character turns around */
     otherDirection = false;
+    /** Speed of the y-axis */
     speedY = 0;
+    /** acceleration by a falling object */
     acceleration = 2.5;
-    energy = 100;
+    /** Energy of the character or the endboss */
+    energy;
+    /** To check when the last hit happened */
     lastHit = 0;
+    /** Is needed for the collisions */
     xCollision;
+    /** Is needed for the collisions */
     yCollision;
+    /** Is needed for the collisions */
     widthCollision;
+    /** Is needed for the collisions */
     heightCollision;
+    /** Control the present x-axis of the character */
     characterPositionX;
+    /** Control if the endboss is seen by the character */
     sawBoss = false;
+    /** Control if the character is dead */
     characterIsDead = false;
+    /** Control if the endboss is dead */
     endbossIsDead = false;
+    /** Interval which pops up if the character dies */
+    showGameOver;
+    /** Counter for the sound to play after win or lose */
+    i = 0;
 
+    /** Set the gravity by jumping or throwing bottles */
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || (this.speedY > 0)) {
@@ -23,6 +41,7 @@ class MovableObject extends DrawableObject {
         }, 1000 / 25);
     }
 
+    /** Let the character move right */
     moveRight() {
         this.x += this.speed;
         this.xCollision = this.x + 20;
@@ -30,6 +49,7 @@ class MovableObject extends DrawableObject {
         this.checkFirstContact();
     }
 
+    /** Let the respective object move left */
     moveLeft() {
         this.x -= this.speed;
         this.xCollision = this.x;
@@ -41,6 +61,10 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+     * To slide the character or the endboss by kill out of map
+     * @param {Function} intervalToEnd - The interval which should be cleared
+     */
     slideOutOfMap(intervalToEnd) {
         clearInterval(intervalToEnd);
         setInterval(() => {
@@ -48,6 +72,11 @@ class MovableObject extends DrawableObject {
         }, 1000 / 60);
     }
 
+    /** 
+     * Check the first contact between character and endboss
+     * by compare the pixels of 'firstContact' and the present
+     * x-axis of the character
+     */
     checkFirstContact() {
         if (this.x >= this.firstContact) {
             this.sawBoss = true;
@@ -55,29 +84,55 @@ class MovableObject extends DrawableObject {
         }
     }
 
-    clearIntervals() {
-        let i = 0;
+    /** Check the winner */
+    checkWinner() {
         setInterval(() => {
             if (this.endbossIsDead) {
-                i++;
-                clearInterval(world.character.characterMoving);
-                clearInterval(world.character.characterAnimation);
-                sounds[walking_sound.pause()];
-                world.character.yCollision = -800;
-                if (i == 100) {
-                    sounds[win_sound.play()];
-                }
+                this.youWin();
             } else if (this.characterIsDead) {
-                i++;
-                if (i == 100) {
-                    sounds[lose_sound.play()];
-                }
-                clearInterval(world.endboss.endbossAnimation);
-                clearInterval(world.endboss.enbossMoving);
+                this.youLose();
             }
         }, 10);
     }
 
+    /** Play sound by winning and clear the interval of the character and the endboss */
+    youWin() {
+        this.i++;
+        if (this.i == 100) {
+            sounds[win_sound.play()];
+            this.clearEndbossInterval();
+            this.clearCharacterInterval();
+        }
+    }
+
+    /** Play sound by losing and clear the interval of the character and the endboss */
+    youLose() {
+        this.i++;
+        if (this.i == 100) {
+            sounds[lose_sound.play()];
+            this.clearEndbossInterval();
+            this.clearCharacterInterval();
+        }
+    }
+
+    /** Clear the intervals from the character */
+    clearCharacterInterval() {
+        clearInterval(this.world.character.characterMoving);
+        clearInterval(this.world.character.characterAnimation);
+        sounds[walking_sound.pause()];
+        this.world.character.yCollision = -800;
+    }
+
+    /** Clear the intervals from the endboss */
+    clearEndbossInterval() {
+        clearInterval(this.world.endboss.endbossAnimation);
+        clearInterval(this.world.endboss.endbossMoving);
+    }
+
+    /** 
+     * By hitting substract health and save the time
+     * when the hit is happened
+     */
     hit() {
         if (this instanceof Character) {
             this.energy -= 5;
@@ -89,20 +144,50 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+     * Check if the endboss or the character is dead
+     * @returns Is dead if the energy is 0 or lower
+     */
     isDead() {
         return this.energy <= 0;
     }
 
-    // hittedEndboss() {
+    /** Show the Game Over screen */
+    gameOver() {
+        if (this instanceof Endboss) {
+            this.endbossIsDead = true;
+        } else {
+            this.characterIsDead = true;
+        }
+        this.showGameOver = setTimeout(() => {
+            document.getElementById('gameOver').classList.remove('d-none');
+            document.getElementById('backToMenu').classList.remove('d-none');
+        }, 1000);
+    }
 
-    // }
+    /** Animation for the dead act and let the dead object slide down */
+    animateDead(interval, img) {
+        if (this instanceof Endboss) {
+            sounds[chicken_damage_sound.pause()];
+        }
+        this.slideOutOfMap(interval);
+        this.playAnimation(img);
+    }
 
+    /**
+     * Check if the endboss or the character were hitted
+     * @returns One second damage
+     */
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit;
         timePassed = timePassed / 1000;
         return timePassed < 1;
     }
 
+    /**
+     * Can be a throwable object or the character
+     * @returns Object is above ground
+     */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return this.y < 347;
@@ -111,10 +196,19 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+     * Let the character jump
+     * @returns The speed of the y-axis
+     */
     jump() {
         return this.speedY = 30;
     }
 
+    /**
+     * Check if the character jumps of the enemy
+     * @param {Object} mo - Enemy
+     * @returns if false if the character didn't jump of the enemy
+     */
     isJumpOf(mo) {
         return this.xCollision + this.widthCollision > mo.xCollision &&
             this.yCollision + this.heightCollision < 382.5 &&

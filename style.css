@@ -43,7 +43,8 @@ body {
 .intro {
     position: absolute;
     z-index: 2;
-    /* display: none; */
+    height: 100% !important;
+    width: 100% !important;
 }
 
 .touch {
@@ -57,19 +58,7 @@ body {
 }
 
 .touch-buttons {
-    display: flex;
-    gap: 20px;
-}
-
-.touch-buttons img {
-    background-color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 100%;
-}
-
-.touch-buttons img:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+    display: none;
 }
 
 .info {
@@ -84,6 +73,8 @@ body {
 .end-game {
     position: absolute;
     object-fit: cover;
+    height: 100% !important;
+    width: 100% !important;
     z-index: 3;
 }
 
@@ -125,6 +116,8 @@ canvas {
     position: relative;
     display: flex;
     justify-content: center;
+    /* height: fit-content;
+    width: fit-content; */
 }
 
 .fullscreen {

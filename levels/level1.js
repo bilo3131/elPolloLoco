@@ -1,5 +1,6 @@
 let level1;
 
+/** Sets the objects by call */
 function initLevel() {
     level1 = new Level(
         [
@@ -16,8 +17,7 @@ function initLevel() {
             new SmallChicken(),
             new SmallChicken(),
             new SmallChicken(),
-            new SmallChicken(),
-            new Endboss()
+            new SmallChicken()
         ],
 
         [

@@ -43,6 +43,19 @@
         width: 100% !important;
     }
 
+    .touch-buttons {
+        /* display: flex; */
+        gap: 20px;
+        display: flex !important;
+    }
+
+    .touch-buttons img {
+        background-color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 100%;
+    }
+
     .touch {
         bottom: 10px;
         height: 30px;

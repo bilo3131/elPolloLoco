@@ -1,3 +1,4 @@
+/** All sounds in the whole game */
 const sounds = [
     throw_sound = new Audio('assets/audio/throw.mp3'),
     walking_sound = new Audio('assets/audio/walk.mp3'),
@@ -9,5 +10,6 @@ const sounds = [
     chicken_damage_sound = new Audio('assets/audio/chickenDamage.mp3'),
     chicken_dead_sound = new Audio('assets/audio/chickenDead.mp3'),
     bottle_sound = new Audio('assets/audio/bottle.mp3'),
-    coin_sound = new Audio('assets/audio/coin.mp3')
+    coin_sound = new Audio('assets/audio/coin.mp3'),
+    music = new Audio('assets/audio/music.mp3')
 ];
