@@ -17,10 +17,8 @@ class Chicken extends MovableObject {
     /** Set a chicken object which is movable */
     constructor() {
         super();
-
         this.x = 400 + Math.random() * 2100;
         this.speed = 0.15 + Math.random() * 0.25;
-
         this.animate();
     }
 
@@ -29,7 +27,6 @@ class Chicken extends MovableObject {
         this.chickenMoving = setInterval(() => {
             this.moveLeft();
         }, 1000 / 60);
-
         this.chickenWalkingAnimation = setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
         }, 200);
@@ -42,7 +39,6 @@ class Chicken extends MovableObject {
         clearInterval(this.chickenWalkingAnimation);
         this.loadImage(img);
         this.xCollision = -200;
-
         this.chickenFall = setInterval(() => {
             this.y++;
         }, 1000 / 60);

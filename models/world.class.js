@@ -55,10 +55,10 @@ class World {
 
     /** Check if you can throw a bottle */
     throwable() {
-        if (this.keyboard.D && this.statusbarBottles.percentage > 0 && this.objectIsThrowable) {
+        if (this.keyboard.D && this.statusbarBottles.percentage > 0 && this.objectIsThrowable && this.endbossIsLiving()) {
+            this.throwBottle();
             this.nextBottle();
             sounds[throw_sound.play()];
-            this.throwBottle();
         }
     }
 
@@ -74,7 +74,7 @@ class World {
         this.objectIsThrowable = false;
         setTimeout(() => {
             this.objectIsThrowable = true;
-        }, 1000);
+        }, 1500);
     }
 
     /** Check if an enemy is colliding the character */
@@ -87,7 +87,7 @@ class World {
 
     /** Hurt the character and update the percentage of its life */
     damageCharacter(enemy) {
-        if (this.character.isColliding(enemy) && !(this.character.endbossIsDead)) {
+        if (this.character.isColliding(enemy) && !(this.endboss.endbossIsDead)) {
             this.character.hit();
             this.statusbarHealth.setPercentage(this.character.energy);
         }
@@ -116,7 +116,7 @@ class World {
                 enemy.killed(enemy.IMAGE_DEAD);
             }
         });
-        if (this.throwableObjects.length > 0 && this.throwedObject(this.endboss) && this.endbossIsLiving()) {
+        if (this.throwableObjects.length > 0 && this.bottle.isColliding(this.endboss) && this.endbossIsLiving()) {
             this.endboss.hit();
         }
     }

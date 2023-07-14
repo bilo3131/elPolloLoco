@@ -4,7 +4,7 @@ let canvas;
 let world;
 /** Keybind for the movement of the character */
 let keyboard = new Keyboard();
-/**  */
+/** To check if the game is in fullscreen */
 let isFullscreen = false;
 /** To check if the game was already started */
 let restartable = false;
@@ -37,13 +37,16 @@ function toggleIntroElements() {
 function removeGameOverElements() {
    let gameOver = document.getElementById('gameOver');
    let backToMenu = document.getElementById('backToMenu');
+   let endbossHelath = document.getElementById('endbossHealth');
+   let life = document.getElementById('life');
    gameOver.classList.add('d-none');
    backToMenu.classList.add('d-none');
+   endbossHelath.classList.add('d-none');
+   life.innerHTML = '5';
 }
 
 /** Starts the game and sets the volume */
 function startTheGame() {
-   // settedIntervals();
    init();
    volume();
 }

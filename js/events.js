@@ -33,8 +33,10 @@ window.addEventListener('keyup', (e) => {
         keyboard.LEFT = false;
     if (e.code == 'Space')
         keyboard.SPACE = false;
-    if (e.code == 'KeyD')
+    if (e.code == 'KeyD'){
         keyboard.D = false;
+    }
+
 });
 
 /** EventListener for touchscreen devices */

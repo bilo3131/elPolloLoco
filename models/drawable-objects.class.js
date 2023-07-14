@@ -21,7 +21,7 @@ class DrawableObject {
     collectedCoins = 0;
 
     /**
-     * Load an image
+     * Load one image
      * @param {Path2D} path - Path of the respective image
      */
     loadImage(path) {

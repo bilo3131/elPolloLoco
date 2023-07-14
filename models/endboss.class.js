@@ -12,6 +12,7 @@ class Endboss extends MovableObject {
     widthCollision = this.width;
     /** Is needed for the collision with the character */
     heightCollision = this.height;
+    /** To check if the character is behind the endboss */
     behindEndboss;
     /** Interval for the moving of the endboss */
     endbossMoving;
@@ -41,7 +42,6 @@ class Endboss extends MovableObject {
         this.loadImages(this.images.hurt);
         this.x = 2300;
         this.xCollision = this.x;
-
         this.animate();
         this.checkWinner();
     }
@@ -80,7 +80,7 @@ class Endboss extends MovableObject {
 
     /** Animate the hurt scene and substract health */
     hurtEndboss() {
-        if (this.j <= 10) {
+        if (this.j < 11) {
             sounds[chicken_damage_sound.play()];
             this.energy--;
             this.playAnimation(this.images.hurt);
@@ -94,7 +94,6 @@ class Endboss extends MovableObject {
      * then the walk scenes
      */
     animateAttackWalk() {
-        this.j;
         if (this.i < 15) {
             this.playAnimation(this.images.attack);
             this.i++;
@@ -107,9 +106,7 @@ class Endboss extends MovableObject {
 
     /** Control the life of the endboss and set the health */
     checkLife() {
-        if (this.energy == 41) {
-            document.getElementById('life').innerHTML = '5';
-        } else if (this.energy > 30) {
+        if (this.energy > 30) {
             document.getElementById('life').innerHTML = '4';
         } else if (this.energy > 20) {
             document.getElementById('life').innerHTML = '3';

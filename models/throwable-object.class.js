@@ -30,9 +30,11 @@ class ThrowableObject extends MovableObject {
     /** Determine the direction where the bottle throw at */
     lookRight = true;
     /** Counter for the animation of the splashed bottle */
-    i = 0;
-    /** Counter for the sound of the colliding bottle */
-    j = 0;
+    n = 0;
+    /** Interval to set the direction, where the bottle should be throw at */
+    bottleDirection;
+    /** Interval to set the animation of the thrown bottle */
+    animationBottle;
 
     /**
      * Set the bottle which is thrown and its measures
@@ -54,33 +56,23 @@ class ThrowableObject extends MovableObject {
     /** 
      * Check the direction of the throwing bottle
      * and set the animations of the throwing and 
-     * the splashing moments
+     * splashing moments
      */
     throw() {
         if (world.character.otherDirection) {
             this.lookRight = false;
         }
-        setInterval(() => {
-            this.positionObject();
+        this.bottleDirection = setInterval(() => {
+            this.setDirectionOfThrowing();
         }, 25);
-        setInterval(() => {
+        this.animationBottle = setInterval(() => {
             this.animateThrowing();
         }, 100);
     }
 
-    /** Check if the throwed bottle is colliding something */
-    positionObject() {
-        if (this.isAboveGround() && !this.hurtEndboss()) {
-            this.setDirectionOfThrowing();
-        } else {
-            this.speedY = 0
-        }
-    }
-
     /** Animations of the throwed bottle by colliding  */
     animateThrowing() {
-        if (this.hurtEndboss() || !this.isAboveGround()) {
-            this.xCollision = -800;
+        if (!this.isAboveGround() || this.hurtEndboss()) {
             this.bottleColliding();
         } else {
             this.playAnimation(this.IMAGES_THROWING);
@@ -89,8 +81,9 @@ class ThrowableObject extends MovableObject {
 
     /** Let the bottle splash first then vanish it */
     bottleColliding() {
-        if (this.i < 6) {
+        if (this.n < 4) {
             this.splashBottle();
+            this.n++;
         } else {
             this.vanishBottle();
         }
@@ -98,20 +91,17 @@ class ThrowableObject extends MovableObject {
 
     /** Let the bottle splash and play the sound for the splashing bottle */
     splashBottle() {
-        this.j++;
-        if (this.j == 1) {
-            sounds[bottle_splash.play()];
-        }
+        this.speedX = 0;
+        sounds[bottle_splash.play()];
         this.playAnimation(this.IMAGES_SPLASHING);
-        this.speedY = 0;
-        this.speedX = 0
-        this.i++;
+        this.xCollision = -800;
     }
 
     /** Let the splashed bottle vanish */
     vanishBottle() {
         this.x = -800;
-        this.i = 0;
+        clearInterval(this.animationBottle);
+        clearInterval(this.bottleDirection);
     }
 
     /** Check if the bottle is throwing right or left */
@@ -139,7 +129,7 @@ class ThrowableObject extends MovableObject {
      * @returns the endboss is getting damage or not
      */
     hurtEndboss() {
-        return world.endboss.isHurt();
+        return world.endboss.x < this.x;
     }
 }
 

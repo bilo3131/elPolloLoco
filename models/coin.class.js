@@ -23,7 +23,6 @@ class Coin extends CollectableObjects {
     constructor() {
         super().loadImage(this.IMAGES_OBJECTS[0]);
         this.loadImages(this.IMAGES_OBJECTS);
-
         this.animate();
     }
 }

@@ -28,12 +28,12 @@ class MovableObject extends DrawableObject {
     /** Interval which pops up if the character dies */
     showGameOver;
     /** Counter for the sound to play after win or lose */
-    i = 0;
+    k = 0;
 
     /** Set the gravity by jumping or throwing bottles */
     applyGravity() {
         setInterval(() => {
-            if (this.isAboveGround() || (this.speedY > 0)) {
+            if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.yCollision -= this.speedY;
                 this.speedY -= this.acceleration;
@@ -97,8 +97,8 @@ class MovableObject extends DrawableObject {
 
     /** Play sound by winning and clear the interval of the character and the endboss */
     youWin() {
-        this.i++;
-        if (this.i == 100) {
+        this.k++;
+        if (this.k == 100) {
             sounds[win_sound.play()];
             this.clearEndbossInterval();
             this.clearCharacterInterval();
@@ -107,8 +107,8 @@ class MovableObject extends DrawableObject {
 
     /** Play sound by losing and clear the interval of the character and the endboss */
     youLose() {
-        this.i++;
-        if (this.i == 100) {
+        this.k++;
+        if (this.k == 100) {
             sounds[lose_sound.play()];
             this.clearEndbossInterval();
             this.clearCharacterInterval();
@@ -185,12 +185,13 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * Can be a throwable object or the character
+     * Can be a throwable object or the character.
+     * To check if the object is in the air.
      * @returns Object is above ground
      */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
-            return this.y < 347;
+            return this.y < 347 && this.x < world.endboss.x;
         } else {
             return this.y < 180;
         }
